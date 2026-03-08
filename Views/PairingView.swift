@@ -10,6 +10,7 @@ struct PairingView: View {
 
     @State private var mode: PairMode = .choose
     @State private var enteredCode: String = ""
+    @State private var showingScanner: Bool = false
     @FocusState private var codeFocused: Bool
 
     enum PairMode { case choose, create, join }
@@ -195,6 +196,32 @@ struct PairingView: View {
             Text("Enter Partner's Code")
                 .font(.title3.bold())
                 .foregroundStyle(.white)
+
+            // Scan QR button
+            Button {
+                showingScanner = true
+            } label: {
+                Label("Scan QR Code", systemImage: "qrcode.viewfinder")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Capsule().fill(HKColor.deepRose.opacity(0.8)))
+            }
+            .sheet(isPresented: $showingScanner) {
+                QRScannerView { scanned in
+                    enteredCode = String(scanned.prefix(6))
+                    showingScanner = false
+                    if enteredCode.count == 6 {
+                        pairing.joinWithCode(enteredCode, appState: appState)
+                    }
+                }
+                .ignoresSafeArea()
+            }
+
+            Text("or type it manually")
+                .font(.caption)
+                .foregroundStyle(.secondary)
 
             // Code input
             TextField("A B C 1 2 3", text: $enteredCode)
