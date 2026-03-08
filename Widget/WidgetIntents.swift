@@ -25,12 +25,6 @@ struct SendHugIntent: AppIntent {
 
         let settings = UserHapticSettings.load()
 
-        // Sender confirmation haptic
-        await HapticService.shared.playConfirmation(
-            duration: settings.confirmDuration,
-            intensity: Float(settings.confirmIntensity)
-        )
-
         // Send to partner (fire-and-forget; widget shouldn't block)
         Task {
             try? await FirebaseService.shared.send(
@@ -64,11 +58,6 @@ struct SendKissIntent: AppIntent {
         else { return .result() }
 
         let settings = UserHapticSettings.load()
-
-        await HapticService.shared.playConfirmation(
-            duration: settings.confirmDuration,
-            intensity: Float(settings.confirmIntensity)
-        )
 
         Task {
             try? await FirebaseService.shared.send(
