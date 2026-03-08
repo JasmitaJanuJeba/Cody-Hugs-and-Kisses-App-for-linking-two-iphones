@@ -52,7 +52,7 @@ public final class FirebaseService {
     public func createInvite(uid: String, name: String, fcmToken: String) async throws -> String {
         let code = randomCode()
         let invite = PairingInvite(inviterUID: uid, inviterName: name, inviterFCMToken: fcmToken)
-        try db.collection("invites").document(code).setData(from: invite)
+        try await db.collection("invites").document(code).setData(from: invite)
         return code
     }
 
