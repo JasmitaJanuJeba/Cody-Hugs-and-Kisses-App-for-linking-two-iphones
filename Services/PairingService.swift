@@ -3,6 +3,7 @@
 //             OR: scan QR → accept invite → notify inviter
 
 import SwiftUI
+import Combine
 import CoreImage.CIFilterBuiltins
 
 @MainActor
