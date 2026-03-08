@@ -30,6 +30,9 @@ public enum SharedDefaultsKey: String {
     // Sender confirmation haptic
     case confirmDuration    = "confirm_duration"     // seconds: 0.1 – 1.0
     case confirmIntensity   = "confirm_intensity"    // 0.0 – 1.0
+
+    // Widget-initiated send (written by widget, cleared by app)
+    case pendingAction      = "pending_action"       // "hug" | "kiss" | nil
 }
 
 public final class SharedDefaults {

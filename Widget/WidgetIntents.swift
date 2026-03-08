@@ -12,30 +12,13 @@ struct SendHugIntent: AppIntent {
     static var title: LocalizedStringResource = "Send Hug"
     static var description = IntentDescription("Sends a hug to your partner")
 
-    // Open app in background – do NOT bring to foreground
-    static var openAppWhenRun: Bool = false
+    // Open the app so it can read the pending action and send via Firebase
+    static var openAppWhenRun: Bool = true
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        guard SharedDefaults.bool(for: .isPaired),
-              let myUID      = SharedDefaults.string(for: .myUID),
-              let partnerUID = SharedDefaults.string(for: .partnerUID),
-              let myName     = SharedDefaults.string(for: .myName)
-        else { return .result() }
-
-        let settings = UserHapticSettings.load()
-
-        // Send to partner (fire-and-forget; widget shouldn't block)
-        Task {
-            try? await FirebaseService.shared.send(
-                type: "hug",
-                senderUID: myUID,
-                senderName: myName,
-                recipientUID: partnerUID,
-                settings: settings
-            )
-        }
-
+        guard SharedDefaults.bool(for: .isPaired) else { return .result() }
+        SharedDefaults.set("hug", for: .pendingAction)
         return .result()
     }
 }
@@ -47,28 +30,12 @@ struct SendKissIntent: AppIntent {
     static var title: LocalizedStringResource = "Send Kiss"
     static var description = IntentDescription("Sends a kiss to your partner")
 
-    static var openAppWhenRun: Bool = false
+    static var openAppWhenRun: Bool = true
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        guard SharedDefaults.bool(for: .isPaired),
-              let myUID      = SharedDefaults.string(for: .myUID),
-              let partnerUID = SharedDefaults.string(for: .partnerUID),
-              let myName     = SharedDefaults.string(for: .myName)
-        else { return .result() }
-
-        let settings = UserHapticSettings.load()
-
-        Task {
-            try? await FirebaseService.shared.send(
-                type: "kiss",
-                senderUID: myUID,
-                senderName: myName,
-                recipientUID: partnerUID,
-                settings: settings
-            )
-        }
-
+        guard SharedDefaults.bool(for: .isPaired) else { return .result() }
+        SharedDefaults.set("kiss", for: .pendingAction)
         return .result()
     }
 }
