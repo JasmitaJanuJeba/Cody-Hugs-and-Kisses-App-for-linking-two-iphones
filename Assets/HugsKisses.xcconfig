@@ -1,0 +1,13 @@
+// HugsKisses.xcconfig
+// Shared Xcode build settings for the main app and widget extension.
+// Reference this file in both target build settings.
+
+// App Group (must match in both targets AND in SharedDefaults.swift)
+APP_GROUP_ID = group.com.yourname.hugsandkisses
+
+// URL scheme for deep-links from widget taps
+// Register in Info.plist under CFBundleURLTypes > CFBundleURLSchemes
+URL_SCHEME = hugsandkisses
+
+// Bundle ID prefix
+PRODUCT_BUNDLE_IDENTIFIER_PREFIX = com.yourname.hugsandkisses
